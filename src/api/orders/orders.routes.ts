@@ -1,23 +1,23 @@
-// import express from 'express';
-// import handler from '../handlers/order.handler'; // Mengimpor handler pesanan
+import express from 'express';
+import handler from './orders.handler';
 
-// const router = express.Router();
+const router = express.Router();
 
-// // Default route to check if the API is working
-// router.get('/', (req, res) => {
-//   res.send('Order Management Routes');
-// });
+// Default route to check if the API is working
+router.get('/', (req, res) => {
+  res.send('Order Management Routes');
+});
 
 // // Orders Routes
 
-// // GET /api/v1/order-dashboard/orders
-// router.get('/orders', handler.getAllOrders);
+// GET /api/v1/order-dashboard/orders
+router.get('/orders', handler.getAllOrders);
 
-// // GET /api/v1/order-dashboard/orders/:orderId
-// router.get('/orders/:orderId', handler.getOrderById);
+// GET /api/v1/order-dashboard/orders
+router.get('/orders/', getOrdersByState);
 
-// // POST /api/v1/order-dashboard/orders
-// router.post('/orders', handler.createOrder);
+// GET /api/v1/order-dashboard/orders/:orderId
+router.get('/orders/:orderId', handler.getOrderById);
 
 // // PUT /api/v1/order-dashboard/orders/:orderId
 // router.put('/orders/:orderId', handler.updateOrder);
