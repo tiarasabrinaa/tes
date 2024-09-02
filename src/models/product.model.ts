@@ -6,6 +6,6 @@ export const productSchema = mysqlTable('products', {
   price: int('price').notNull(),
   stock: int('stock').notNull(),
   image: text('image').notNull(),
-  createdAt: timestamp('created_at').notNull().defaultNow(),
-  updatedAt: timestamp('updated_at').onUpdateNow(),
+  created_at: timestamp('created_at').notNull().defaultNow(),
+  updated_at: timestamp('updated_at').onUpdateNow(),
 });
