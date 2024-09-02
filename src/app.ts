@@ -5,8 +5,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 
 import api from './api';
-import errorHandler from './middlewares/error-handler';
-import notFound from './middlewares/not-found';
+// import errorHandler from './middlewares/error-handler';
+// import notFound from './middlewares/not-found';
 
 dotenv.config();
 
@@ -41,7 +41,7 @@ app.use('/api/v1', api);
 console.log('[server]: Router loaded');
 
 // Error handling
-app.use(notFound);
-app.use(errorHandler);
+// app.use(notFound);
+// app.use(errorHandler);
 
 export default app;

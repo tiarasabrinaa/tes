@@ -1,23 +1,23 @@
 import express from 'express';
-import handler from '../handlers/product.handler'; // Mengimpor handler produk
+import handler from './product.handler';
 
 const router = express.Router();
 
 // Products Routes
 
 // GET /api/v1/order-dashboard/products
-router.get('/products', handler.getAllProducts);
+router.get('/products', handler.getProducts);
 
-// GET /api/v1/order-dashboard/products/:productId
-router.get('/products/:productId', handler.getProductById);
+// // GET /api/v1/order-dashboard/products/:productId
+// router.get('/products/:productId', handler.getProductById);
 
-// POST /api/v1/order-dashboard/products
-router.post('/products', handler.createProduct);
+// // POST /api/v1/order-dashboard/products
+// router.post('/products', handler.createProduct);
 
-// PUT /api/v1/order-dashboard/products/:productId
-router.put('/products/:productId', handler.updateProduct);
+// // PUT /api/v1/order-dashboard/products/:productId
+// router.put('/products/:productId', handler.updateProduct);
 
-// DELETE /api/v1/order-dashboard/products/:productId
-router.delete('/products/:productId', handler.deleteProduct);
+// // DELETE /api/v1/order-dashboard/products/:productId
+// router.delete('/products/:productId', handler.deleteProduct);
 
 export default router;
