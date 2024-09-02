@@ -9,8 +9,8 @@ const express_1 = __importDefault(require("express"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
 const api_1 = __importDefault(require("./api"));
-const error_handler_1 = __importDefault(require("./middlewares/error-handler"));
-const not_found_1 = __importDefault(require("./middlewares/not-found"));
+// import errorHandler from './middlewares/error-handler';
+// import notFound from './middlewares/not-found';
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const allowlist = [
@@ -39,7 +39,7 @@ app.use(express_1.default.json());
 app.use('/api/v1', api_1.default);
 console.log('[server]: Router loaded');
 // Error handling
-app.use(not_found_1.default);
-app.use(error_handler_1.default);
+// app.use(notFound);
+// app.use(errorHandler);
 exports.default = app;
 //# sourceMappingURL=app.js.map
