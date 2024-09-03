@@ -1,11 +1,14 @@
-// import express from 'express';
-// import handler from '../customer.handler';
+import express from 'express';
+import handler from './customers.handler';
 
-// const router = express.Router();
+const router = express.Router();
 
-// // Customers Routes
+// Customers Routes
 
-// // GET /api/v1/order-dashboard/customers/:customerId
-// router.get('/customers/:customerId', handler.getCustomerById);
+// GET /api/v1/order-dashboard/customers
+router.get('/customers', handler.getAllCustomers);
 
-// export default router;
+// GET /api/v1/order-dashboard/customers/:customerId
+router.get('/customers/:customerId', handler.getCustomerById);
+
+export default router;

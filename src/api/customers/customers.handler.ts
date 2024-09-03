@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { db } from '../../db';
-import { productSchema } from '../../models/product.model';
 import apiResponse from '../../utils/api-response';
 import HandlerFunction from '../../utils/handler-function';
 import { eq } from 'drizzle-orm';
@@ -22,8 +21,8 @@ async function getAllCustomers(req: Request, res: Response) {
 
 async function getCustomerById(req: Request, res: Response) {
   try {
-    const {id} = req.params;
-    const product = await db.select().from(customerSchema).where(eq(customerSchema.id, id)).limit(1);
+    const {customerId} = req.params;
+    const product = await db.select().from(customerSchema).where(eq(customerSchema.id, customerId)).limit(1);
     res.json(apiResponse.success('Customer found!', product));
   } catch (error: any) {
     res.json(apiResponse.error('An error occurred while fetching products!', error));

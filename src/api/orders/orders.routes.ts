@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 router.get('/orders', handler.getAllOrders);
 
 // GET /api/v1/order-dashboard/orders
-router.get('/orders/', getOrdersByState);
+router.get('/orders/', handler.getOrdersByState);
 
 // GET /api/v1/order-dashboard/orders/:orderId
 router.get('/orders/:orderId', handler.getOrderById);
@@ -25,4 +25,4 @@ router.get('/orders/:orderId', handler.getOrderById);
 // // DELETE /api/v1/order-dashboard/orders/:orderId
 // router.delete('/orders/:orderId', handler.deleteOrder);
 
-// export default router;
+export default router;
