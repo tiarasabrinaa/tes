@@ -4,32 +4,33 @@ import { productSchema } from '../../models/product.model';
 import apiResponse from '../../utils/api-response';
 import HandlerFunction from '../../utils/handler-function';
 import { eq } from 'drizzle-orm';
+import { customerSchema } from '../../models/customers.model';
 
 interface ProductHandler {
-  getAllProducts: HandlerFunction;
-  getProductById: HandlerFunction;
+    getAllCustomers: HandlerFunction;
+    getCustomerById: HandlerFunction;
 }
 
-async function getAllProducts(req: Request, res: Response) {
+async function getAllCustomers(req: Request, res: Response) {
   try {
-    const products = await db.select().from(productSchema);
-    res.json(apiResponse.success('Products found!', products));
+    const products = await db.select().from(customerSchema);
+    res.json(apiResponse.success('Customers found!', products));
   } catch (error: any) {
     res.json(apiResponse.error('An error occurred while fetching products!', error));
   }
 }
 
-async function getProductById(req: Request, res: Response) {
+async function getCustomerById(req: Request, res: Response) {
   try {
     const {id} = req.params;
-    const product = await db.select().from(productSchema).where(eq(productSchema.id, id)).limit(1);
-    res.json(apiResponse.success('Products found!', product));
+    const product = await db.select().from(customerSchema).where(eq(customerSchema.id, id)).limit(1);
+    res.json(apiResponse.success('Customer found!', product));
   } catch (error: any) {
     res.json(apiResponse.error('An error occurred while fetching products!', error));
   }
 }
 
 export default {
-  getAllProducts,
-  getProductById,
+    getAllCustomers,
+    getCustomerById,
 } as ProductHandler;
