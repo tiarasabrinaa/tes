@@ -19,8 +19,8 @@ router.get('/orders/', handler.getOrdersByState);
 // GET /api/v1/order-dashboard/orders/:orderId
 router.get('/orders/:orderId', handler.getOrderById);
 
-// // PUT /api/v1/order-dashboard/orders/:orderId
-// router.put('/orders/:orderId', handler.updateOrder);
+// PUT /api/v1/order-dashboard/orders/:orderId
+router.put('/orders/:orderId', handler.updateOrderState);
 
 // // DELETE /api/v1/order-dashboard/orders/:orderId
 // router.delete('/orders/:orderId', handler.deleteOrder);

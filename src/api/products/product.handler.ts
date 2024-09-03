@@ -21,8 +21,8 @@ async function getAllProducts(req: Request, res: Response) {
 
 async function getProductById(req: Request, res: Response) {
   try {
-    const {id} = req.params;
-    const product = await db.select().from(productSchema).where(eq(productSchema.id, id)).limit(1);
+    const {productId} = req.params;
+    const product = await db.select().from(productSchema).where(eq(productSchema.id, productId)).limit(1);
     res.json(apiResponse.success('Products found!', product));
   } catch (error: any) {
     res.json(apiResponse.error('An error occurred while fetching products!', error));
