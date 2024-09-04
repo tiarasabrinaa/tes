@@ -1,22 +1,25 @@
 "use strict";
-// import express from 'express';
-// import handler from '../handlers/order.handler'; // Mengimpor handler pesanan
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-// const router = express.Router();
-// // Default route to check if the API is working
-// router.get('/', (req, res) => {
-//   res.send('Order Management Routes');
-// });
+const express_1 = __importDefault(require("express"));
+const orders_handler_1 = __importDefault(require("./orders.handler"));
+const router = express_1.default.Router();
+// Default route to check if the API is working
+router.get('/', (req, res) => {
+    res.send('Order Management Routes');
+});
 // // Orders Routes
-// // GET /api/v1/order-dashboard/orders
-// router.get('/orders', handler.getAllOrders);
-// // GET /api/v1/order-dashboard/orders/:orderId
-// router.get('/orders/:orderId', handler.getOrderById);
-// // POST /api/v1/order-dashboard/orders
-// router.post('/orders', handler.createOrder);
-// // PUT /api/v1/order-dashboard/orders/:orderId
-// router.put('/orders/:orderId', handler.updateOrder);
+// GET /api/v1/order-dashboard/orders
+router.get('/orders', orders_handler_1.default.getAllOrders);
+// GET /api/v1/order-dashboard/orders
+router.get('/orders/', orders_handler_1.default.getOrdersByState);
+// GET /api/v1/order-dashboard/orders/:orderId
+router.get('/orders/:orderId', orders_handler_1.default.getOrderById);
+// PUT /api/v1/order-dashboard/orders/:orderId
+router.put('/orders/:orderId', orders_handler_1.default.updateOrderState);
 // // DELETE /api/v1/order-dashboard/orders/:orderId
 // router.delete('/orders/:orderId', handler.deleteOrder);
-// export default router;
+exports.default = router;
 //# sourceMappingURL=orders.routes.js.map

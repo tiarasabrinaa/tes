@@ -1,14 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.productSchema = void 0;
+exports.customerSchema = void 0;
 const mysql_core_1 = require("drizzle-orm/mysql-core");
-exports.productSchema = (0, mysql_core_1.mysqlTable)('products', {
+exports.customerSchema = (0, mysql_core_1.mysqlTable)('customers', {
     id: (0, mysql_core_1.varchar)('id', { length: 16 }).primaryKey(),
     name: (0, mysql_core_1.varchar)('name', { length: 255 }).notNull(),
-    price: (0, mysql_core_1.int)('price').notNull(),
-    stock: (0, mysql_core_1.int)('stock').notNull(),
-    image: (0, mysql_core_1.text)('image').notNull(),
+    address: (0, mysql_core_1.text)('address').notNull(),
+    email: (0, mysql_core_1.varchar)('email', { length: 255 }).notNull(),
+    phone: (0, mysql_core_1.varchar)('phone', { length: 20 }).notNull(),
     created_at: (0, mysql_core_1.timestamp)('created_at').notNull().defaultNow(),
     updated_at: (0, mysql_core_1.timestamp)('updated_at').onUpdateNow(),
 });
-//# sourceMappingURL=product.model.js.map
+//# sourceMappingURL=customers.model.js.map

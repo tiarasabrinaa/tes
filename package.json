@@ -4,15 +4,16 @@
   "description": "API for e-kanban",
   "main": "dist/src/index.js",
   "scripts": {
-    "start": "node dist/src/index.js",
     "dev": "nodemon src/index.ts",
+    "start": "node dist/src/faker.js",
+    "seed": "node dist/src/faker.js",
     "build": "tsc",
     "lint": "eslint --fix src test",
     "test": "jest",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate:mysql",
     "db:migrate": "drizzle-kit push:mysql",
-    "db:seed": "ts-node src/db/seed/index.ts" 
+    "db:seed": "ts-node src/db/seed/index.ts"
   },
   "keywords": [],
   "author": "Tiara Sabrina <tiarasabrina304@gmail.com>",
@@ -31,10 +32,10 @@
     "drizzle-orm": "^0.30.10",
     "drizzle-zod": "^0.5.1",
     "express": "^4.18.2",
+    "faker": "^6.6.6",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "mysql2": "^3.9.7",
     "qrcode": "^1.5.3",
     "zod": "^3.23.8"
   },

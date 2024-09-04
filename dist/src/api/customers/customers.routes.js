@@ -1,12 +1,15 @@
 "use strict";
-// import express from 'express';
-// import handler from '../handlers/customer.handler'; // Mengimpor handler pelanggan
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-// const router = express.Router();
-// // Customers Routes
-// // GET /api/v1/order-dashboard/customers/:customerId
-// router.get('/customers/:customerId', handler.getCustomerById);
-// // PUT /api/v1/order-dashboard/customers/:customerId
-// router.put('/customers/:customerId', handler.updateCustomer);
-// export default router;
+const express_1 = __importDefault(require("express"));
+const customers_handler_1 = __importDefault(require("./customers.handler"));
+const router = express_1.default.Router();
+// Customers Routes
+// GET /api/v1/order-dashboard/customers
+router.get('/customers', customers_handler_1.default.getAllCustomers);
+// GET /api/v1/order-dashboard/customers/:customerId
+router.get('/customers/:customerId', customers_handler_1.default.getCustomerById);
+exports.default = router;
 //# sourceMappingURL=customers.routes.js.map

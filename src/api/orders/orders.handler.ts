@@ -33,7 +33,7 @@ async function getOrdersByState(req: Request, res: Response): Promise<void> {
   try {
     const { state } = req.params;
 
-    const allowedStates = ['state1', 'state2'] as const;
+    const allowedStates = ['processed', 'sent', 'done', 'cancelled'] as const;
 
     if (!state || !allowedStates.includes(state as typeof allowedStates[number])) {
       res.status(500).json(apiResponse.error('Invalid request: Invalid state value'));
