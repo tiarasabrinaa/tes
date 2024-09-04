@@ -40,7 +40,7 @@ async function seedDatabase() {
 
     // Create products
     for (let i = 0; i < 10; i++) {
-      const productId = faker.string.alphanumeric(16); // ID alfanumerik acak dengan panjang 16 karakter
+      const productId = faker.string.alphanumeric(16);
       productIds.push(productId);
 
       await db.insert(productSchema).values({
@@ -76,7 +76,7 @@ async function seedDatabase() {
       const productId = faker.helpers.arrayElement(productIds);
 
       await db.insert(orderDetailSchema).values({
-        id: faker.number.int({ min: 1, max: 1000000 }), // Menggunakan integer untuk ID detail order
+        id: faker.number.int({ min: 1, max: 1000000 }),
         order_id: orderId,
         product_id: productId,
         sub_total: faker.number.int({ min: 10, max: 100 }),
