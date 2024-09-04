@@ -64,7 +64,7 @@ async function seedDatabase() {
         id: orderId,
         customer_id: customerId,
         total_price: faker.number.int({ min: 100, max: 1000 }),
-        order_state: faker.helpers.arrayElement(['processed', 'sent', 'done', 'cancelled']),
+        order_state: faker.helpers.arrayElement(['new', 'processed', 'sent', 'done', 'cancelled']),
         created_at: new Date(),
         updated_at: new Date(),
       });

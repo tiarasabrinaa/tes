@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "start": "node dist/src/faker.js",
+    "start": "node dist/src/index.js",
     "seed": "node dist/src/faker.js",
     "build": "tsc",
     "lint": "eslint --fix src test",

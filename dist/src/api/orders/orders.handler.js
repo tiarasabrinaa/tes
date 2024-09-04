@@ -24,7 +24,7 @@ async function getAllOrders(req, res) {
 async function getOrdersByState(req, res) {
     try {
         const { state } = req.params;
-        const allowedStates = ['processed', 'sent', 'done', 'cancelled'];
+        const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'];
         if (!state || !allowedStates.includes(state)) {
             res.status(500).json(api_response_1.default.error('Invalid request: Invalid state value'));
             return;

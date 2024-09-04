@@ -33,7 +33,7 @@ async function getOrdersByState(req: Request, res: Response): Promise<void> {
   try {
     const { state } = req.params;
 
-    const allowedStates = ['processed', 'sent', 'done', 'cancelled'] as const;
+    const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'] as const;
 
     if (!state || !allowedStates.includes(state as typeof allowedStates[number])) {
       res.status(500).json(apiResponse.error('Invalid request: Invalid state value'));
@@ -95,31 +95,53 @@ async function getOrderById(req: Request, res: Response): Promise<void> {
 
 async function updateOrderState(req: Request, res: Response): Promise<void> {
   try {
-    const { id, newState } = req.body;
+    const { id, newState } = req.params;
+
     if (!id || !newState) {
-      res.status(500).json(apiResponse.error('Invalid Request'));
+      res.status(400).json(apiResponse.error('Invalid Request: Missing id or newState'));
       return;
     }
 
-    // TODO: Implement the logic to update the order state
-    // Allowed new state: state1, state2, cancel
+    const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'] as const;
 
-    // if new state cancel, langsung cancel
+    if (!allowedStates.includes(newState as typeof allowedStates[number])) {
+      res.status(400).json(apiResponse.error('Invalid request: Invalid state value'));
+      return;
+    }
 
-    // if currentstate belum diproses, new state harus proses
-    // else if currentstate anu, new state harus anu
-    // else 400 bad request
-
-    //check if the order exist
+    // Check if the order exists
     const order = await db.select().from(orderSchema).where(eq(orderSchema.id, id)).limit(1);
-    if (order.length == 0) {
-      res.status(404).json(apiResponse.error('Part not found'));
+    if (order.length === 0) {
+      res.status(404).json(apiResponse.error('Order not found'));
       return;
     }
-    order[0].order_state = newState;
-    res.json(apiResponse.success('', order));
+
+    const currentOrder = order[0];
+    const currentState = currentOrder.order_state;
+
+    // Implement business logic for updating state
+    if (newState === 'cancelled') {
+      // Directly set to cancelled if new state is cancelled
+      await db.update(orderSchema).set({ order_state: 'cancelled' }).where(eq(orderSchema.id, id));
+    } else if (currentState === 'new' && newState === 'processed') {
+      // Allow update if current state is 'new' and new state is 'processed'
+      await db.update(orderSchema).set({ order_state: newState }).where(eq(orderSchema.id, id));
+    } else if (currentState === 'processed' && (newState === 'sent' || newState === 'done')) {
+      // Allow update if current state is 'processed' and new state is 'sent' or 'done'
+      await db.update(orderSchema).set({ order_state: newState }).where(eq(orderSchema.id, id));
+    } else if (currentState === 'sent' && newState === 'done') {
+      // Allow update if current state is 'sent' and new state is 'done'
+      await db.update(orderSchema).set({ order_state: newState }).where(eq(orderSchema.id, id));
+    } else {
+      res.status(400).json(apiResponse.error('Invalid state transition'));
+      return;
+    }
+
+    const updatedOrder = await db.select().from(orderSchema).where(eq(orderSchema.id, id)).limit(1);
+    res.json(apiResponse.success('Order updated successfully', updatedOrder[0]));
   } catch (error: any) {
-    res.status(500).json(apiResponse.error('Invalid request'));
+    console.error('Error updating order state:', error);
+    res.status(500).json(apiResponse.error('Internal Server Error'));
   }
 }
 
