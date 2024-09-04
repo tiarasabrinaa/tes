@@ -9,21 +9,23 @@ const faker_1 = require("@faker-js/faker");
 const customers_model_1 = require("./models/customers.model");
 const product_model_1 = require("./models/product.model");
 const orders_model_1 = require("./models/orders.model");
-const mysqlConfig = {
-    host: 'localhost',
-    user: 'root',
-    password: 'Tsr190719*',
-    database: 'padiumkm',
+const database_1 = require("./config/database");
+const dbConfig = {
+    host: database_1.mysqlConfig.host,
+    user: database_1.mysqlConfig.user,
+    password: database_1.mysqlConfig.password,
+    database: database_1.mysqlConfig.database,
 };
+const SEED_LENGTH = 50;
 async function seedDatabase() {
-    const connection = await mysql2_2.default.createConnection(mysqlConfig);
+    const connection = await mysql2_2.default.createConnection(dbConfig);
     const db = (0, mysql2_1.drizzle)(connection);
     try {
         const customerIds = [];
         const productIds = [];
         const orderIds = [];
         // Create customers
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < SEED_LENGTH; i++) {
             const customerId = faker_1.faker.string.alphanumeric(16);
             customerIds.push(customerId);
             await db.insert(customers_model_1.customerSchema).values({
@@ -37,7 +39,7 @@ async function seedDatabase() {
             });
         }
         // Create products
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < SEED_LENGTH; i++) {
             const productId = faker_1.faker.string.alphanumeric(16);
             productIds.push(productId);
             await db.insert(product_model_1.productSchema).values({
@@ -51,7 +53,7 @@ async function seedDatabase() {
             });
         }
         // Create orders
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < SEED_LENGTH; i++) {
             const orderId = faker_1.faker.string.alphanumeric(16);
             orderIds.push(orderId);
             const customerId = faker_1.faker.helpers.arrayElement(customerIds);
@@ -65,7 +67,7 @@ async function seedDatabase() {
             });
         }
         // Create order details
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < SEED_LENGTH; i++) {
             const orderId = faker_1.faker.helpers.arrayElement(orderIds);
             const productId = faker_1.faker.helpers.arrayElement(productIds);
             await db.insert(orders_model_1.orderDetailSchema).values({

@@ -76,28 +76,68 @@ async function getOrderById(req, res) {
 }
 async function updateOrderState(req, res) {
     try {
-        const { id, newState } = req.body;
+        const { id, newState } = req.params;
         if (!id || !newState) {
-            res.status(500).json(api_response_1.default.error('Invalid Request'));
+            res.status(400).json(api_response_1.default.error('Invalid Request: Missing id or newState'));
             return;
         }
-        // TODO: Implement the logic to update the order state
-        // Allowed new state: state1, state2, cancel
-        // if new state cancel, langsung cancel
-        // if currentstate belum diproses, new state harus proses
-        // else if currentstate anu, new state harus anu
-        // else 400 bad request
-        //check if the order exist
+        const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'];
+        if (!allowedStates.includes(newState)) {
+            res.status(400).json(api_response_1.default.error('Invalid request: Invalid state value'));
+            return;
+        }
+        // Check if the order exists
         const order = await db_1.db.select().from(orders_model_1.orderSchema).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.id, id)).limit(1);
-        if (order.length == 0) {
-            res.status(404).json(api_response_1.default.error('Part not found'));
+        if (order.length === 0) {
+            res.status(404).json(api_response_1.default.error('Order not found'));
             return;
         }
-        order[0].order_state = newState;
-        res.json(api_response_1.default.success('', order));
+        const currentOrder = order[0];
+        const currentState = currentOrder.order_state;
+        // Implement business logic for updating state
+        if (newState === 'cancelled') {
+            // Directly set to cancelled if new state is cancelled
+            await db_1.db.update(orders_model_1.orderSchema).set({ order_state: 'cancelled' }).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.id, id));
+        }
+        else if (currentState === 'new' && newState === 'processed') {
+            // Allow update if current state is 'new' and new state is 'processed'
+            await db_1.db.update(orders_model_1.orderSchema).set({ order_state: newState }).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.id, id));
+        }
+        else if (currentState === 'processed' && (newState === 'sent' || newState === 'done')) {
+            // Allow update if current state is 'processed' and new state is 'sent' or 'done'
+            await db_1.db.update(orders_model_1.orderSchema).set({ order_state: newState }).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.id, id));
+        }
+        else if (currentState === 'sent' && newState === 'done') {
+            // Allow update if current state is 'sent' and new state is 'done'
+            await db_1.db.update(orders_model_1.orderSchema).set({ order_state: newState }).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.id, id));
+        }
+        else {
+            res.status(400).json(api_response_1.default.error('Invalid state transition'));
+            return;
+        }
+        const updatedOrder = await db_1.db.select().from(orders_model_1.orderSchema).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.id, id)).limit(1);
+        res.json(api_response_1.default.success('Order updated successfully', updatedOrder[0]));
     }
     catch (error) {
-        res.status(500).json(api_response_1.default.error('Invalid request'));
+        console.error('Error updating order state:', error);
+        res.status(500).json(api_response_1.default.error('Internal Server Error'));
+    }
+}
+async function countOrdersByState(req, res) {
+    try {
+        const { state } = req.params;
+        const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'];
+        if (!state || !allowedStates.includes(state)) {
+            res.status(400).json(api_response_1.default.error('Invalid request: Invalid state value'));
+            return;
+        }
+        const orders = await db_1.db.select().from(orders_model_1.orderSchema).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.order_state, state));
+        const count = orders.length;
+        res.json(api_response_1.default.success('Count retrieved successfully', { count: count }));
+    }
+    catch (error) {
+        console.error('Error counting orders by state:', error);
+        res.status(500).json(api_response_1.default.error('Internal Server Error'));
     }
 }
 exports.default = {

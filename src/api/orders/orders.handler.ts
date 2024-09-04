@@ -14,6 +14,7 @@ interface OrderHandler {
   getOrdersByState: HandlerFunction;
   getOrderById: HandlerFunction;
   updateOrderState: HandlerFunction;
+  countOrdersByState: HandlerFunction;
 }
 
 async function getAllOrders(req: Request, res: Response): Promise<void> {
@@ -145,9 +146,31 @@ async function updateOrderState(req: Request, res: Response): Promise<void> {
   }
 }
 
+async function countOrdersByState(req: Request, res: Response): Promise<void> {
+  try {
+    const { state } = req.body;
+
+    const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'] as const;
+
+    if (!state || !allowedStates.includes(state as typeof allowedStates[number])) {
+      res.status(400).json(apiResponse.error('Invalid request: Invalid state value'));
+      return;
+    }
+
+    const orders = await db.select().from(orderSchema).where(eq(orderSchema.order_state, state as typeof allowedStates[number]));
+    const count = orders.length
+
+    res.json(apiResponse.success('Count retrieved successfully', { count: count }));
+  } catch (error: any) {
+    console.error('Error counting orders by state:', error);
+    res.status(500).json(apiResponse.error('Internal Server Error'));
+  }
+}
+
 export default {
   getAllOrders,
   getOrdersByState,
   getOrderById,
   updateOrderState,
+  countOrdersByState,
 } as OrderHandler;
