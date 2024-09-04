@@ -5,16 +5,19 @@ import { faker } from '@faker-js/faker';
 import { customerSchema } from './models/customers.model';
 import { productSchema } from './models/product.model';
 import { orderSchema, orderDetailSchema } from './models/orders.model';
+import { mysqlConfig } from './config/database';
 
-const mysqlConfig = {
-  host: 'localhost',
-  user: 'root',
-  password: 'Tsr190719*',
-  database: 'padiumkm',
+const dbConfig = {
+  host: mysqlConfig.host,
+  user: mysqlConfig.user,
+  password: mysqlConfig.password,
+  database: mysqlConfig.database,
 };
 
+const SEED_LENGTH = 50;
+
 async function seedDatabase() {
-  const connection = await mysql.createConnection(mysqlConfig);
+  const connection = await mysql.createConnection(dbConfig);
   const db = drizzle(connection);
 
   try {
@@ -23,7 +26,7 @@ async function seedDatabase() {
     const orderIds = [];
 
     // Create customers
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < SEED_LENGTH; i++) {
       const customerId = faker.string.alphanumeric(16);
       customerIds.push(customerId);
 
@@ -39,7 +42,7 @@ async function seedDatabase() {
     }
 
     // Create products
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < SEED_LENGTH; i++) {
       const productId = faker.string.alphanumeric(16);
       productIds.push(productId);
 
@@ -55,7 +58,7 @@ async function seedDatabase() {
     }
 
     // Create orders
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < SEED_LENGTH; i++) {
       const orderId = faker.string.alphanumeric(16);
       orderIds.push(orderId);
       const customerId = faker.helpers.arrayElement(customerIds);
@@ -71,7 +74,7 @@ async function seedDatabase() {
     }
 
     // Create order details
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < SEED_LENGTH; i++) {
       const orderId = faker.helpers.arrayElement(orderIds);
       const productId = faker.helpers.arrayElement(productIds);
 
