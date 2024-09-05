@@ -125,7 +125,7 @@ async function updateOrderState(req, res) {
 }
 async function countOrdersByState(req, res) {
     try {
-        const { state } = req.params;
+        const { state } = req.body;
         const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'];
         if (!state || !allowedStates.includes(state)) {
             res.status(400).json(api_response_1.default.error('Invalid request: Invalid state value'));
@@ -145,5 +145,6 @@ exports.default = {
     getOrdersByState,
     getOrderById,
     updateOrderState,
+    countOrdersByState,
 };
 //# sourceMappingURL=orders.handler.js.map
