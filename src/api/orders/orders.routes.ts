@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   res.send('Order Management Routes');
 });
 
-// // Orders Routes
+// Orders Routes
 
 // GET /api/v1/order-dashboard/orders
 router.get('/orders/', handler.getAllOrders);
@@ -17,7 +17,7 @@ router.get('/orders/', handler.getAllOrders);
 router.get('/orders/:id', handler.getOrderById);
 
 // PUT /api/v1/order-dashboard/orders/:orderId
-router.put('/orders-update/:id', handler.updateOrderState);
+router.put('/orders/:id', handler.updateOrderState);
 
 // PUT /api/v1/order-dashboard/orders/:state
 router.get('/orders-count/', handler.countOrders);

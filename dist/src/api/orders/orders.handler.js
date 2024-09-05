@@ -10,26 +10,19 @@ const drizzle_orm_1 = require("drizzle-orm");
 const customers_model_1 = require("../../models/customers.model");
 async function getAllOrders(req, res) {
     try {
-        const orders = await db_1.db.select().from(orders_model_1.orderSchema);
-        if (orders.length == 0) {
-            res.json(api_response_1.default.success('There are no orders', null));
-            return;
+        const { filterState } = req.query;
+        let orders = [];
+        if (filterState) {
+            const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'];
+            if (!allowedStates.includes(filterState)) {
+                res.status(500).json(api_response_1.default.error('Invalid request: Invalid state value'));
+                return;
+            }
+            orders = await db_1.db.select().from(orders_model_1.orderSchema).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.order_state, filterState));
         }
-        res.json(api_response_1.default.success('', orders));
-    }
-    catch (error) {
-        res.status(500).json(api_response_1.default.error('Invalid request'));
-    }
-}
-async function getOrdersByState(req, res) {
-    try {
-        const { state } = req.params;
-        const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'];
-        if (!state || !allowedStates.includes(state)) {
-            res.status(500).json(api_response_1.default.error('Invalid request: Invalid state value'));
-            return;
+        else {
+            orders = await db_1.db.select().from(orders_model_1.orderSchema);
         }
-        const orders = await db_1.db.select().from(orders_model_1.orderSchema).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.order_state, state));
         if (orders.length === 0) {
             res.json(api_response_1.default.success('There are no orders', null));
             return;
@@ -65,7 +58,7 @@ async function getOrderById(req, res) {
         const responseData = {
             order: order[0],
             customer: customer[0],
-            orderDetails: orderDetails
+            orderDetails: orderDetails,
         };
         res.json(api_response_1.default.success('Order retrieved successfully', responseData));
     }
@@ -142,7 +135,6 @@ async function countOrders(req, res) {
 }
 exports.default = {
     getAllOrders,
-    getOrdersByState,
     getOrderById,
     updateOrderState,
     countOrders,
