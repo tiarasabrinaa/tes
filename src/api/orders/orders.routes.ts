@@ -17,13 +17,13 @@ router.get('/orders', handler.getAllOrders);
 router.get('/orders/:state', handler.getOrdersByState);
 
 // GET /api/v1/order-dashboard/orders/:orderId
-router.get('/orders/:orderId', handler.getOrderById);
+router.get('/orders/:id', handler.getOrderById);
 
 // PUT /api/v1/order-dashboard/orders/:orderId
-router.put('/orders/:orderId', handler.updateOrderState);
+router.put('/orders-update/:id', handler.updateOrderState);
 
 // PUT /api/v1/order-dashboard/orders/:state
-router.put('/orders/', handler.countOrdersByState);
+router.get('/orders-count/', handler.countOrders);
 
 // // DELETE /api/v1/order-dashboard/orders/:orderId
 // router.delete('/orders/:orderId', handler.deleteOrder);

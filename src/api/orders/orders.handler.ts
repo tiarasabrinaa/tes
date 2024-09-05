@@ -5,7 +5,7 @@ import { orderDetailSchema, orderSchema } from '../../models/orders.model';
 
 import apiResponse from '../../utils/api-response';
 import HandlerFunction from '../../utils/handler-function';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import { customerSchema } from '../../models/customers.model';
 
@@ -14,7 +14,7 @@ interface OrderHandler {
   getOrdersByState: HandlerFunction;
   getOrderById: HandlerFunction;
   updateOrderState: HandlerFunction;
-  countOrdersByState: HandlerFunction;
+  countOrders: HandlerFunction;
 }
 
 async function getAllOrders(req: Request, res: Response): Promise<void> {
@@ -96,7 +96,8 @@ async function getOrderById(req: Request, res: Response): Promise<void> {
 
 async function updateOrderState(req: Request, res: Response): Promise<void> {
   try {
-    const { id, newState } = req.params;
+    const { id } = req.params;
+    const { newState } = req.body;
 
     if (!id || !newState) {
       res.status(400).json(apiResponse.error('Invalid Request: Missing id or newState'));
@@ -146,21 +147,17 @@ async function updateOrderState(req: Request, res: Response): Promise<void> {
   }
 }
 
-async function countOrdersByState(req: Request, res: Response): Promise<void> {
+async function countOrders(req: Request, res: Response): Promise<void> {
   try {
-    const { state } = req.body;
+    const results = await db
+      .select({
+        order_state: sql`order_state`,
+        total_order: sql`COUNT(*)`,
+      })
+      .from(orderSchema)
+      .groupBy(sql`order_state`);
 
-    const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'] as const;
-
-    if (!state || !allowedStates.includes(state as typeof allowedStates[number])) {
-      res.status(400).json(apiResponse.error('Invalid request: Invalid state value'));
-      return;
-    }
-
-    const orders = await db.select().from(orderSchema).where(eq(orderSchema.order_state, state as typeof allowedStates[number]));
-    const count = orders.length
-
-    res.json(apiResponse.success('Count retrieved successfully', { count: count }));
+    res.json(apiResponse.success('Count retrieved successfully', { count: results }));
   } catch (error: any) {
     console.error('Error counting orders by state:', error);
     res.status(500).json(apiResponse.error('Internal Server Error'));
@@ -172,5 +169,5 @@ export default {
   getOrdersByState,
   getOrderById,
   updateOrderState,
-  countOrdersByState,
+  countOrders,
 } as OrderHandler;

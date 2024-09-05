@@ -76,7 +76,8 @@ async function getOrderById(req, res) {
 }
 async function updateOrderState(req, res) {
     try {
-        const { id, newState } = req.params;
+        const { id } = req.params;
+        const { newState } = req.body;
         if (!id || !newState) {
             res.status(400).json(api_response_1.default.error('Invalid Request: Missing id or newState'));
             return;
@@ -123,17 +124,16 @@ async function updateOrderState(req, res) {
         res.status(500).json(api_response_1.default.error('Internal Server Error'));
     }
 }
-async function countOrdersByState(req, res) {
+async function countOrders(req, res) {
     try {
-        const { state } = req.body;
-        const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'];
-        if (!state || !allowedStates.includes(state)) {
-            res.status(400).json(api_response_1.default.error('Invalid request: Invalid state value'));
-            return;
-        }
-        const orders = await db_1.db.select().from(orders_model_1.orderSchema).where((0, drizzle_orm_1.eq)(orders_model_1.orderSchema.order_state, state));
-        const count = orders.length;
-        res.json(api_response_1.default.success('Count retrieved successfully', { count: count }));
+        const results = await db_1.db
+            .select({
+            order_state: (0, drizzle_orm_1.sql) `order_state`,
+            total_order: (0, drizzle_orm_1.sql) `COUNT(*)`,
+        })
+            .from(orders_model_1.orderSchema)
+            .groupBy((0, drizzle_orm_1.sql) `order_state`);
+        res.json(api_response_1.default.success('Count retrieved successfully', { count: results }));
     }
     catch (error) {
         console.error('Error counting orders by state:', error);
@@ -145,6 +145,6 @@ exports.default = {
     getOrdersByState,
     getOrderById,
     updateOrderState,
-    countOrdersByState,
+    countOrders,
 };
 //# sourceMappingURL=orders.handler.js.map
