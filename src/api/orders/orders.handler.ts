@@ -19,11 +19,28 @@ interface OrderHandler {
 
 async function getAllOrders(req: Request, res: Response): Promise<void> {
   try {
-    const orders = await db.select().from(orderSchema);
-    if (orders.length == 0) {
+    const { filterState } = req.query;
+
+    let orders = [];
+
+    if (filterState) {
+      const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'] as const;
+
+      if (!allowedStates.includes(filterState as typeof allowedStates[number])) {
+        res.status(500).json(apiResponse.error('Invalid request: Invalid state value'));
+        return;
+      }
+
+      orders = await db.select().from(orderSchema).where(eq(orderSchema.order_state, filterState as typeof allowedStates[number]));
+    } else {
+      orders = await db.select().from(orderSchema);
+    }
+
+    if (orders.length === 0) {
       res.json(apiResponse.success('There are no orders', null));
       return;
     }
+
     res.json(apiResponse.success('', orders));
   } catch (error: any) {
     res.status(500).json(apiResponse.error('Invalid request'));
@@ -83,7 +100,7 @@ async function getOrderById(req: Request, res: Response): Promise<void> {
     const responseData = {
       order: order[0],
       customer: customer[0],
-      orderDetails: orderDetails
+      orderDetails: orderDetails,
     };
 
     res.json(apiResponse.success('Order retrieved successfully', responseData));
