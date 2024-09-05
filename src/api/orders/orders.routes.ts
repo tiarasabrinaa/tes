@@ -11,10 +11,7 @@ router.get('/', (req, res) => {
 // // Orders Routes
 
 // GET /api/v1/order-dashboard/orders
-router.get('/orders', handler.getAllOrders);
-
-// GET /api/v1/order-dashboard/orders
-router.get('/orders/:state', handler.getOrdersByState);
+router.get('/orders/', handler.getAllOrders);
 
 // GET /api/v1/order-dashboard/orders/:orderId
 router.get('/orders/:id', handler.getOrderById);

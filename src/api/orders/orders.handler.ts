@@ -11,7 +11,6 @@ import { customerSchema } from '../../models/customers.model';
 
 interface OrderHandler {
   getAllOrders: HandlerFunction;
-  getOrdersByState: HandlerFunction;
   getOrderById: HandlerFunction;
   updateOrderState: HandlerFunction;
   countOrders: HandlerFunction;
@@ -35,30 +34,6 @@ async function getAllOrders(req: Request, res: Response): Promise<void> {
     } else {
       orders = await db.select().from(orderSchema);
     }
-
-    if (orders.length === 0) {
-      res.json(apiResponse.success('There are no orders', null));
-      return;
-    }
-
-    res.json(apiResponse.success('', orders));
-  } catch (error: any) {
-    res.status(500).json(apiResponse.error('Invalid request'));
-  }
-}
-
-async function getOrdersByState(req: Request, res: Response): Promise<void> {
-  try {
-    const { state } = req.params;
-
-    const allowedStates = ['new', 'processed', 'sent', 'done', 'cancelled'] as const;
-
-    if (!state || !allowedStates.includes(state as typeof allowedStates[number])) {
-      res.status(500).json(apiResponse.error('Invalid request: Invalid state value'));
-      return;
-    }
-
-    const orders = await db.select().from(orderSchema).where(eq(orderSchema.order_state, state as typeof allowedStates[number]));
 
     if (orders.length === 0) {
       res.json(apiResponse.success('There are no orders', null));
@@ -183,7 +158,6 @@ async function countOrders(req: Request, res: Response): Promise<void> {
 
 export default {
   getAllOrders,
-  getOrdersByState,
   getOrderById,
   updateOrderState,
   countOrders,
