@@ -10,7 +10,7 @@ const router = express_1.default.Router();
 router.get('/', (req, res) => {
     res.send('Order Management Routes');
 });
-// // Orders Routes
+// Orders Routes
 // GET /api/v1/order-dashboard/orders
 router.get('/orders/', orders_handler_1.default.getAllOrders);
 // GET /api/v1/order-dashboard/orders/:orderId

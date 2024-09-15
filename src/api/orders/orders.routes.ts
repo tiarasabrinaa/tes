@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   res.send('Order Management Routes');
 });
 
-// // Orders Routes
+// Orders Routes
 
 // GET /api/v1/order-dashboard/orders
 router.get('/orders/', handler.getAllOrders);
