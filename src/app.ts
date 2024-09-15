@@ -12,23 +12,19 @@ dotenv.config();
 
 const app = express();
 
-const allowlist = [
-  'https://ekanban-manufacture.vercel.app',
-  'http://localhost:5173',
-];
-
 const corsOptions: CorsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowlist.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  // origin: (origin, callback) => {
+  //   if (!origin || allowlist.includes(origin)) {
+  //     callback(null, true);
+  //   } else {
+  //     callback(new Error('Not allowed by CORS'));
+  //   }
+  // },
+  origin: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
-  maxAge: 600, // 10 minutes
+  maxAge: 600, // 10 minutes
 };
 
 app.use(morgan('dev'));

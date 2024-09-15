@@ -13,23 +13,19 @@ const api_1 = __importDefault(require("./api"));
 // import notFound from './middlewares/not-found';
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const allowlist = [
-    'https://ekanban-manufacture.vercel.app',
-    'http://localhost:5173',
-];
 const corsOptions = {
-    origin: (origin, callback) => {
-        if (!origin || allowlist.includes(origin)) {
-            callback(null, true);
-        }
-        else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
+    // origin: (origin, callback) => {
+    //   if (!origin || allowlist.includes(origin)) {
+    //     callback(null, true);
+    //   } else {
+    //     callback(new Error('Not allowed by CORS'));
+    //   }
+    // },
+    origin: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    maxAge: 600, // 10 minutes
+    maxAge: 600, // 10 minutes
 };
 app.use((0, morgan_1.default)('dev'));
 app.use((0, helmet_1.default)());
