@@ -6,6 +6,7 @@ exports.customerSchema = (0, mysql_core_1.mysqlTable)('customers', {
     id: (0, mysql_core_1.varchar)('id', { length: 16 }).primaryKey(),
     name: (0, mysql_core_1.varchar)('name', { length: 255 }).notNull(),
     address: (0, mysql_core_1.text)('address').notNull(),
+    photos: (0, mysql_core_1.text)('photos').notNull(),
     email: (0, mysql_core_1.varchar)('email', { length: 255 }).notNull(),
     phone: (0, mysql_core_1.varchar)('phone', { length: 20 }).notNull(),
     created_at: (0, mysql_core_1.timestamp)('created_at').notNull().defaultNow(),

@@ -1,7 +1,7 @@
 {
-  "name": "e-kanban-api",
+  "name": "padiumkm-api",
   "version": "1.0.0",
-  "description": "API for e-kanban",
+  "description": "API for padiUMKM",
   "main": "dist/src/index.js",
   "scripts": {
     "dev": "nodemon src/index.ts",
