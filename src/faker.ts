@@ -85,23 +85,22 @@ async function seedDatabase() {
       const orderId = faker.helpers.arrayElement(orderIds);
       const productId = faker.helpers.arrayElement(productIds);
       
-      // Fetch the product's price from the productSchema based on the productId
       const product = await db
         .select()
         .from(productSchema)
-        .where(eq(productSchema.id, productId)) // Correctly compare the column with the productId value
+        .where(eq(productSchema.id, productId))
         .limit(1);
         
       if (product && product[0]) {
-        const price = product[0].price; // Get the price of the product
-        const quantity = faker.number.int({ min: 1, max: 10 }); // Ensure quantity is at least 1
+        const price = product[0].price;
+        const quantity = faker.number.int({ min: 1, max: 10 });
     
         await db.insert(orderDetailSchema).values({
           id: faker.number.int({ min: 1, max: 1000000 }),
           order_id: orderId,
           product_id: productId,
           quantity: quantity,
-          sub_total: price * quantity, // Calculate sub_total as price * quantity
+          sub_total: price * quantity,
           created_at: new Date(),
           updated_at: new Date(),
         });
